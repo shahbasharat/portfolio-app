@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "convert-gifs": "node scripts/convert-gifs.js",
-    "postinstall": "npm install --legacy-peer-deps"
+    "convert-gifs": "node scripts/convert-gifs.js"
   },
   "dependencies": {
     "autoprefixer": "^10.4.27",
