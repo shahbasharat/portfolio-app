@@ -11,6 +11,11 @@ export const metadata: Metadata = {
   description: "Portfolio of Basharat Salam, a dedicated System Admin and Network Administrator specializing in enterprise IT environments, cybersecurity, and infrastructure.",
   keywords: ["System Administrator", "Network Administrator", "Cybersecurity", "Sophos Firewall", "CCNA", "IT Support", "Seqrite EDR", "Portfolio"],
   authors: [{ name: "Basharat Salam" }],
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/favicon-32x32.png",
+  },
   openGraph: {
     title: "Basharat Salam | System & Network Administrator",
     description: "Explore the technical portfolio, cybersecurity projects, and enterprise networking implementations of Basharat Salam.",
