@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     apple: "/favicon-32x32.png",
   },
   openGraph: {
-    title: "Basharat Salam | System & Network Administrator",
+    title: "Basharat Salam | System & Network Administrator | Portfolio",
     description: "Explore the technical portfolio, cybersecurity projects, and enterprise networking implementations of Basharat Salam.",
     url: "https://v0-basharat.vercel.app",
     siteName: "Basharat Salam Portfolio",
