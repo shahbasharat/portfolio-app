@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import HomeButton from "@/components/HomeButton";
 import ScrollToTop from "@/components/ScrollToTop";
+import CustomCursor from "@/components/CustomCursor";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -41,6 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth scroll-pt-24">
       <body className={`${inter.className} bg-black text-white antialiased`}>
+        <CustomCursor />
         <HomeButton />
         <ScrollToTop />
         {children}
