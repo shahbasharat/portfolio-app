@@ -60,55 +60,60 @@ export default function Certifications() {
   ];
 
   return (
-    <main className="min-h-screen bg-black text-white relative py-24 px-6 md:px-24">
+    <main className="min-h-screen bg-black text-white relative py-24 px-4 md:px-24">
       {/* Background aesthetics */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-gradient-to-b from-blue-900/20 to-transparent blur-[120px] pointer-events-none" />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        
+
         {/* Header */}
-        <Link 
-          href="/#education" 
-          className="inline-flex items-center gap-2 text-neutral-400 hover:text-white mb-16 transition-colors group cursor-pointer font-medium tracking-wide"
+        <Link
+          href="/#education"
+          className="inline-flex items-center gap-2 text-neutral-400 hover:text-white mb-12 transition-colors group cursor-pointer font-medium tracking-wide"
         >
-          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" /> 
+          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           Back to Portfolio
         </Link>
-        
-        <div className="mb-20">
-          <motion.h1 
+
+        <div className="mb-12 md:mb-20">
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-6xl font-light mb-6 flex items-center gap-4"
+            className="text-3xl md:text-6xl font-light mb-6 flex items-center gap-3 flex-wrap"
           >
-            <Award className="w-10 h-10 md:w-14 md:h-14 text-blue-500" />
-            <span className="font-bold">Certifications</span> & Achievements
+            <Award className="w-8 h-8 md:w-14 md:h-14 text-blue-500 shrink-0" />
+            <span><span className="font-bold">Certifications</span> & Achievements</span>
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-neutral-400 text-lg md:text-xl max-w-3xl font-light leading-relaxed"
+            className="text-neutral-400 text-base md:text-xl max-w-3xl font-light leading-relaxed"
           >
             A comprehensive overview of my cybersecurity training, professional certifications, and practical job simulations reinforcing my technical expertise.
           </motion.p>
         </div>
 
         {/* Grid of Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
           {certifications.map((cert, idx) => {
             const CardContent = (
               <>
-                <div className="flex justify-between items-start mb-6">
-                  <h4 className="text-xl md:text-2xl text-white font-medium flex items-start gap-3 group-hover:text-blue-400 transition-colors leading-tight">
+                {/* Date badge on top for mobile */}
+                <span className="inline-block text-xs text-blue-400 font-mono tracking-wider bg-blue-900/20 border border-blue-500/20 px-3 py-1.5 rounded-full mb-4">
+                  {cert.date}
+                </span>
+
+                <div className="flex items-start gap-2 mb-4">
+                  <h4 className="text-lg md:text-2xl text-white font-medium group-hover:text-blue-400 transition-colors leading-tight flex-1">
                     {cert.title}
-                    {cert.link && <ExternalLink className="w-5 h-5 mt-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 text-blue-400" />}
                   </h4>
-                  <span className="text-xs text-blue-400 font-mono tracking-wider bg-blue-900/20 border border-blue-500/20 px-3 py-1.5 rounded-full shrink-0 ml-4">
-                    {cert.date}
-                  </span>
+                  {cert.link && (
+                    <ExternalLink className="w-4 h-4 mt-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 text-blue-400" />
+                  )}
                 </div>
-                <p className="text-neutral-400 text-base md:text-lg leading-relaxed group-hover:text-neutral-300 transition-colors font-light">
+
+                <p className="text-neutral-400 text-sm md:text-lg leading-relaxed group-hover:text-neutral-300 transition-colors font-light">
                   {cert.desc}
                 </p>
               </>
@@ -123,17 +128,17 @@ export default function Certifications() {
                 className="h-full"
               >
                 {cert.link ? (
-                  <a 
-                    href={cert.link} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="block h-full bg-[#0d0d0d] border border-white/[0.05] p-8 md:p-10 rounded-3xl hover:bg-[#151515] hover:border-blue-500/40 transition-all duration-500 group cursor-pointer shadow-lg hover:shadow-[0_0_40px_rgba(37,99,235,0.1)] relative overflow-hidden"
+                  
+                    href={cert.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block h-full bg-[#0d0d0d] border border-white/[0.05] p-6 md:p-10 rounded-3xl hover:bg-[#151515] hover:border-blue-500/40 transition-all duration-500 group cursor-pointer shadow-lg hover:shadow-[0_0_40px_rgba(37,99,235,0.1)] relative overflow-hidden"
                   >
                     <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-bl-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     <div className="relative z-10">{CardContent}</div>
                   </a>
                 ) : (
-                  <div className="h-full bg-[#0d0d0d] border border-white/[0.05] p-8 md:p-10 rounded-3xl hover:bg-[#151515] hover:border-white/20 transition-all duration-500 group shadow-lg relative overflow-hidden">
+                  <div className="h-full bg-[#0d0d0d] border border-white/[0.05] p-6 md:p-10 rounded-3xl hover:bg-[#151515] hover:border-white/20 transition-all duration-500 group shadow-lg relative overflow-hidden">
                     <div className="relative z-10">{CardContent}</div>
                   </div>
                 )}
