@@ -66,7 +66,7 @@ export default function Certifications() {
 
       <div className="max-w-6xl mx-auto relative z-10">
 
-        {/* Header */}
+        {/* Back Button */}
         <Link
           href="/#education"
           className="inline-flex items-center gap-2 text-neutral-400 hover:text-white mb-12 transition-colors group cursor-pointer font-medium tracking-wide"
@@ -75,11 +75,12 @@ export default function Certifications() {
           Back to Portfolio
         </Link>
 
+        {/* Page Title */}
         <div className="mb-12 md:mb-20">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-6xl font-light mb-6 flex items-center gap-3 flex-wrap"
+            className="text-2xl md:text-6xl font-light mb-6 flex items-center gap-3 flex-wrap"
           >
             <Award className="w-8 h-8 md:w-14 md:h-14 text-blue-500 shrink-0" />
             <span><span className="font-bold">Certifications</span> & Achievements</span>
@@ -99,20 +100,17 @@ export default function Certifications() {
           {certifications.map((cert, idx) => {
             const CardContent = (
               <>
-                {/* Date badge on top for mobile */}
-                <span className="inline-block text-xs text-blue-400 font-mono tracking-wider bg-blue-900/20 border border-blue-500/20 px-3 py-1.5 rounded-full mb-4">
-                  {cert.date}
-                </span>
-
-                <div className="flex items-start gap-2 mb-4">
-                  <h4 className="text-lg md:text-2xl text-white font-medium group-hover:text-blue-400 transition-colors leading-tight flex-1">
+                <div className="flex flex-col gap-3 mb-4">
+                  <span className="inline-block self-start text-xs text-blue-400 font-mono tracking-wider bg-blue-900/20 border border-blue-500/20 px-3 py-1.5 rounded-full">
+                    {cert.date}
+                  </span>
+                  <h4 className="text-lg md:text-2xl text-white font-medium group-hover:text-blue-400 transition-colors leading-tight">
                     {cert.title}
+                    {cert.link && (
+                      <ExternalLink className="inline w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity text-blue-400" />
+                    )}
                   </h4>
-                  {cert.link && (
-                    <ExternalLink className="w-4 h-4 mt-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 text-blue-400" />
-                  )}
                 </div>
-
                 <p className="text-neutral-400 text-sm md:text-lg leading-relaxed group-hover:text-neutral-300 transition-colors font-light">
                   {cert.desc}
                 </p>
