@@ -117,7 +117,7 @@ export default function NotFound() {
           {/* Circle frame */}
           <div className="relative w-[400px] h-[400px] rounded-full overflow-hidden border border-white/10">
             <img
-              src="/sequence/frame_068.gif"
+              src="/sequence/frame_100.gif"
               alt="Basharat Salam"
               className="w-full h-full object-cover opacity-90"
             />
