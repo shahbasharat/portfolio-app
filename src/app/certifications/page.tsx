@@ -61,12 +61,10 @@ export default function Certifications() {
 
   return (
     <main className="min-h-screen bg-black text-white relative py-24 px-4 md:px-24">
-      {/* Background aesthetics */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-gradient-to-b from-blue-900/20 to-transparent blur-[120px] pointer-events-none" />
 
       <div className="max-w-6xl mx-auto relative z-10">
 
-        {/* Back Button */}
         <Link
           href="/#education"
           className="inline-flex items-center gap-2 text-neutral-400 hover:text-white mb-12 transition-colors group cursor-pointer font-medium tracking-wide"
@@ -75,7 +73,6 @@ export default function Certifications() {
           Back to Portfolio
         </Link>
 
-        {/* Page Title */}
         <div className="mb-12 md:mb-20">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -95,7 +92,6 @@ export default function Certifications() {
           </motion.p>
         </div>
 
-        {/* Grid of Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
           {certifications.map((cert, idx) => {
             const CardContent = (
