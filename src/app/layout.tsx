@@ -5,6 +5,7 @@ import HomeButton from "@/components/HomeButton";
 import ScrollToTop from "@/components/ScrollToTop";
 import CustomCursor from "@/components/CustomCursor";
 import LoadingScreen from "@/components/LoadingScreen";
+import ScrollProgress from "@/components/ScrollProgress";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,6 +45,7 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth scroll-pt-24">
       <body className={`${inter.className} bg-black text-white antialiased`}>
         <LoadingScreen />
+        <ScrollProgress />
         <CustomCursor />
         <HomeButton />
         <ScrollToTop />
