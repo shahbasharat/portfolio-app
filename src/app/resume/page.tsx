@@ -1,9 +1,16 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Printer, Download, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 export default function ResumePage() {
+  useEffect(() => {
+    document.body.style.cursor = "auto";
+    return () => {
+      document.body.style.cursor = "none";
+    };
+  }, []);
+
   return (
     <main className="min-h-screen bg-white text-black">
 
