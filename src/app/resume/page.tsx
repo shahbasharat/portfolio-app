@@ -12,7 +12,7 @@ export default function ResumePage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-white text-black">
+   <main className="resume-page min-h-screen bg-white text-black">
 
       {/* Action Bar - hidden when printing */}
       <div className="print:hidden fixed top-0 left-0 right-0 z-50 bg-black text-white px-4 md:px-8 py-3 flex items-center justify-between">
