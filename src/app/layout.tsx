@@ -7,6 +7,8 @@ import CustomCursor from "@/components/CustomCursor";
 import LoadingScreen from "@/components/LoadingScreen";
 import ScrollProgress from "@/components/ScrollProgress";
 import { Analytics } from "@vercel/analytics/react";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -43,16 +45,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth scroll-pt-24">
-      <body className={`${inter.className} bg-black text-white antialiased`}>
-        <LoadingScreen />
-        <ScrollProgress />
-        <CustomCursor />
-        <HomeButton />
-        <ScrollToTop />
-        {children}
-       <Analytics />
-      </body>
-    </html>
-  );
-}
+    <html lang="en" className="scroll-smooth scroll-pt-24" suppressHydrationWarning>
+      <body className={`${inter.className} bg-white dark:bg-black text-black dark:text-white antialiased`}>
+        <ThemeProvider>
+          <LoadingScreen />
+          <ScrollProgress />
+          <CustomCursor />
+          <ThemeToggle />
+          <HomeButton />
+          <ScrollToTop />
+          {children}
+          <Anal
