@@ -9,26 +9,16 @@ export default function ResumePage() {
 
       {/* Action Bar - hidden when printing */}
       <div className="print:hidden fixed top-0 left-0 right-0 z-50 bg-black text-white px-4 md:px-8 py-3 flex items-center justify-between">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm"
-        >
+        <Link href="/" className="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm">
           <ArrowLeft className="w-4 h-4" />
           Back to Portfolio
         </Link>
         <div className="flex items-center gap-3">
-          
-            href="/resume.pdf"
-            download
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full text-sm transition-colors"
-          >
+          <a href="/resume.pdf" download className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full text-sm transition-colors">
             <Download className="w-4 h-4" />
             Download PDF
           </a>
-          <button
-            onClick={() => window.print()}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white text-black rounded-full text-sm font-medium hover:bg-neutral-200 transition-colors"
-          >
+          <button onClick={() => window.print()} className="inline-flex items-center gap-2 px-4 py-2 bg-white text-black rounded-full text-sm font-medium hover:bg-neutral-200 transition-colors">
             <Printer className="w-4 h-4" />
             Print
           </button>
@@ -43,10 +33,10 @@ export default function ResumePage() {
           <h1 className="text-3xl md:text-4xl font-bold text-black mb-1">Basharat Salam</h1>
           <p className="text-gray-600 text-base md:text-lg mb-3">System & Network Administrator</p>
           <div className="flex flex-wrap gap-3 text-sm text-gray-500">
-            <span>📍 Srinagar, Jammu & Kashmir</span>
-            <span>✉️ shahbasharat577@gmail.com</span>
-            <span>🌐 v0-basharat.vercel.app</span>
-            <span>📞 +91 7006271979</span>
+            <span>Srinagar, Jammu & Kashmir</span>
+            <span>shahbasharat577@gmail.com</span>
+            <span>v0-basharat.vercel.app</span>
+            <span>+91 7006271979</span>
           </div>
         </div>
 
@@ -65,7 +55,7 @@ export default function ResumePage() {
             <div>
               <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-1">
                 <h3 className="font-semibold text-black">Executive Information Technology</h3>
-                <span className="text-gray-500 text-sm">Aug 2025 – Present</span>
+                <span className="text-gray-500 text-sm">Aug 2025 - Present</span>
               </div>
               <p className="text-gray-600 text-sm mb-2">The Khyber Himalayan Resort & Spa · Gulmarg, J&K</p>
               <ul className="list-disc list-inside text-gray-600 text-sm space-y-1">
@@ -78,7 +68,7 @@ export default function ResumePage() {
             <div>
               <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-1">
                 <h3 className="font-semibold text-black">Executive Information Technology</h3>
-                <span className="text-gray-500 text-sm">Mar 2025 – Aug 2025</span>
+                <span className="text-gray-500 text-sm">Mar 2025 - Aug 2025</span>
               </div>
               <p className="text-gray-600 text-sm mb-2">Skyview by Empyrean · Srinagar, J&K</p>
               <ul className="list-disc list-inside text-gray-600 text-sm space-y-1">
@@ -91,7 +81,7 @@ export default function ResumePage() {
             <div>
               <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-1">
                 <h3 className="font-semibold text-black">Technical Advisor</h3>
-                <span className="text-gray-500 text-sm">Jan 2024 – Feb 2025</span>
+                <span className="text-gray-500 text-sm">Jan 2024 - Feb 2025</span>
               </div>
               <p className="text-gray-600 text-sm mb-2">Ison Xperience (Client: Etisalat) · Bengaluru, India</p>
               <ul className="list-disc list-inside text-gray-600 text-sm space-y-1">
