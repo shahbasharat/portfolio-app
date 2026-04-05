@@ -55,4 +55,9 @@ export default function RootLayout({
           <HomeButton />
           <ScrollToTop />
           {children}
-          <Anal
+          <Analytics />
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
