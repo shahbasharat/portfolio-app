@@ -7,6 +7,7 @@ import CustomCursor from "@/components/CustomCursor";
 import LoadingScreen from "@/components/LoadingScreen";
 import ScrollProgress from "@/components/ScrollProgress";
 import { Analytics } from "@vercel/analytics/react";
+import ParticleBackground from "@/components/ParticleBackground";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,6 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth scroll-pt-24">
       <body className={`${inter.className} bg-black text-white antialiased`}>
+        <ParticleBackground />
         <LoadingScreen />
         <ScrollProgress />
         <CustomCursor />
