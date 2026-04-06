@@ -3,6 +3,7 @@ import React from "react";
 import { Award, ExternalLink, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+
 export default function Certifications() {
   type Certification = { title: string; date: string; desc: string; link?: string };
   const certifications: Certification[] = [
@@ -15,14 +16,17 @@ export default function Certifications() {
     { title: "Google Cloud Skill Badge", date: "Oct 2022", desc: "Hands-on experience with compute, IAM, storage, and networking.", link: "https://www.skills.google/public_profiles/324666f0-7a1f-49e4-abb7-3a26a9da505e" },
     { title: "Introduction to Cybersecurity", date: "Oct 2022", desc: "Cisco fundamentals of threat landscape and network protection.", link: "https://www.credly.com/badges/317859ab-9a91-44f8-a7d8-1d68d3219fc9/linked_in_profile" }
   ];
+
   return (
     <main className="min-h-screen bg-black text-white relative py-24 px-4 md:px-24">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-gradient-to-b from-blue-900/20 to-transparent blur-[120px] pointer-events-none" />
       <div className="max-w-6xl mx-auto relative z-10">
+
         <Link href="/#education" className="inline-flex items-center gap-2 text-neutral-400 hover:text-white mb-12 transition-colors group cursor-pointer font-medium tracking-wide">
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           Back to Portfolio
         </Link>
+
         <div className="mb-12 md:mb-20">
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-2xl md:text-6xl font-light mb-6 flex items-center gap-3 flex-wrap">
             <Award className="w-8 h-8 md:w-14 md:h-14 text-blue-500 shrink-0" />
@@ -32,7 +36,9 @@ export default function Certifications() {
             A comprehensive overview of my cybersecurity training, professional certifications, and practical job simulations reinforcing my technical expertise.
           </motion.p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+
+        {/* Certification Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-16">
           {certifications.map((cert, idx) => {
             const CardContent = (
               <>
@@ -66,6 +72,52 @@ export default function Certifications() {
             );
           })}
         </div>
+
+        {/* TryHackMe Badge Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="border-t border-white/[0.05] pt-12"
+        >
+          <h2 className="text-sm uppercase tracking-[0.2em] text-neutral-500 mb-6">
+            Live Training Profile
+          </h2>
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-8 bg-[#0d0d0d] border border-white/[0.05] p-6 md:p-10 rounded-3xl">
+
+            {/* THM Badge */}
+            <div className="shrink-0">
+              <a href="https://tryhackme.com/p/sbasharat577" target="_blank" rel="noopener noreferrer">
+                <img
+                  src="https://tryhackme-badges.s3.amazonaws.com/sbasharat577.png"
+                  alt="TryHackMe Badge"
+                  className="w-48 md:w-56 rounded-xl hover:scale-105 transition-transform duration-300"
+                />
+              </a>
+            </div>
+
+            {/* Info */}
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                <span className="text-green-400 text-sm font-mono">Active Learner</span>
+              </div>
+              <h3 className="text-xl md:text-2xl font-semibold text-white mb-2">TryHackMe — sbasharat577</h3>
+              <p className="text-neutral-400 text-sm md:text-base font-light leading-relaxed mb-4">
+                Actively completing hands-on cybersecurity labs and CTF-style challenges. Practicing real-world skills across networking, Linux, web security, and threat detection.
+              </p>
+              
+                href="https://tryhackme.com/p/sbasharat577"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full text-sm text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+              >
+                View Profile <ExternalLink className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </motion.div>
+
       </div>
     </main>
   );
