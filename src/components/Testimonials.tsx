@@ -7,8 +7,8 @@ export default function Testimonials() {
   const testimonials = [
     {
       quote: "Basharat demonstrated exceptional technical skills in managing our network infrastructure. His proactive approach to security monitoring and quick incident response made a significant impact on our operations.",
-      name: "Mr. mahesh Khattana ",
-      role: "IT Manager",
+      name: "Mr. Mahesh Khattana",
+      role: "Sr. IT Manager",
       company: "The Khyber Himalayan Resort & Spa"
     },
     {
@@ -75,10 +75,9 @@ export default function Testimonials() {
 
               {/* Person info */}
               <div className="flex items-center gap-4 mt-auto">
-                {/* Avatar circle */}
                 <div className="w-10 h-10 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center shrink-0">
                   <span className="text-blue-400 font-bold text-sm">
-                    {t.name.charAt(0)}
+                    {t.name.replace(/^(Mr\.|Ms\.|Dr\.)\s*/i, "").charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <div>
