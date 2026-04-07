@@ -30,15 +30,15 @@ export default function ParticleBackground() {
 
     const createParticles = () => {
       particles = [];
-      const count = Math.floor((window.innerWidth * window.innerHeight) / 15000);
+      const count = Math.floor((window.innerWidth * window.innerHeight) / 12000);
       for (let i = 0; i < count; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-          size: Math.random() * 1.5 + 0.5,
-          opacity: Math.random() * 0.5 + 0.1,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          size: Math.random() * 2 + 0.5,
+          opacity: Math.random() * 0.6 + 0.2,
         });
       }
     };
@@ -47,39 +47,34 @@ export default function ParticleBackground() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach((p, i) => {
-        // Move
         p.x += p.vx;
         p.y += p.vy;
 
-        // Bounce off edges
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-        // Mouse interaction
         const dx = mouse.x - p.x;
         const dy = mouse.y - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 120) {
-          p.x -= dx * 0.02;
-          p.y -= dy * 0.02;
+        if (dist < 150) {
+          p.x -= dx * 0.03;
+          p.y -= dy * 0.03;
         }
 
-        // Draw particle
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
         ctx.fill();
 
-        // Draw connections
         particles.slice(i + 1).forEach((p2) => {
           const dx2 = p.x - p2.x;
           const dy2 = p.y - p2.y;
           const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
-          if (dist2 < 100) {
+          if (dist2 < 120) {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${0.05 * (1 - dist2 / 100)})`;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.08 * (1 - dist2 / 120)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -102,10 +97,7 @@ export default function ParticleBackground() {
     createParticles();
     drawParticles();
 
-    window.addEventListener("resize", () => {
-      resize();
-      createParticles();
-    });
+    window.addEventListener("resize", () => { resize(); createParticles(); });
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseleave", onMouseLeave);
 
@@ -120,8 +112,16 @@ export default function ParticleBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 z-0 pointer-events-none"
-      style={{ opacity: 0.4 }}
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        zIndex: 2,
+        pointerEvents: "none",
+        opacity: 0.7,
+      }}
     />
   );
 }
