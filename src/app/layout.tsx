@@ -8,6 +8,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import ScrollProgress from "@/components/ScrollProgress";
 import { Analytics } from "@vercel/analytics/react";
 import ParticleBackground from "@/components/ParticleBackground";
+import KonamiCode from "@/components/KonamiCode";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,6 +51,7 @@ export default function RootLayout({
         <LoadingScreen />
         <ScrollProgress />
         <CustomCursor />
+        <KonamiCode />
         <HomeButton />
         <ScrollToTop />
         {children}
