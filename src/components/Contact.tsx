@@ -199,11 +199,14 @@ export default function Contact() {
 
       {/* Footer Bottom */}
       <div className="relative z-10 max-w-7xl mx-auto mt-32 pt-8 border-t border-white/[0.05] flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-neutral-600 font-light">
-        <p>© {new Date().getFullYear()} Basharat Salam. All rights reserved.</p>
-        <p className="flex items-center gap-2 text-neutral-500">
-          <ShieldCheck className="w-4 h-4" /> Secured & Monitored
-        </p>
-      </div>
+  <p>© {new Date().getFullYear()} Basharat Salam. All rights reserved.</p>
+  <p className="text-neutral-600 text-xs font-mono">
+    Last updated: April 2026
+  </p>
+  <p className="flex items-center gap-2 text-neutral-500">
+    <ShieldCheck className="w-4 h-4" /> Secured & Monitored
+  </p>
+</div>
     </footer>
   );
 }
