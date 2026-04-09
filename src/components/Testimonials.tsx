@@ -6,9 +6,7 @@ import { Quote } from "lucide-react";
 export default function Testimonials() {
   const testimonials = [
     {
-      quote: "Hi Basharat I’d like to take a moment to sincerely appreciate your contributions to our IT team. Your dedication, technical expertise, and proactive approach have consistently made a positive impact on our projects and overall team performance.
-              You have demonstrated a strong ability to troubleshoot complex issues, deliver high-quality work under pressure, and collaborate effectively with team members. Your willingness to go the extra mile and support others does not go unnoticed.
-              Your commitment to continuous learning and improvement is especially commendable, and it sets a great example for the rest of the team. We truly value your contributions and look forward to your continued success and growth within the team.",
+      quote: "Hi Basharat I’d like to take a moment to sincerely appreciate your contributions to our IT team. Your dedication, technical expertise, and proactive approach have consistently made a positive impact on our projects and overall team performance.You have demonstrated a strong ability to troubleshoot complex issues, deliver high-quality work under pressure, and collaborate effectively with team members. Your willingness to go the extra mile and support others does not go unnoticed.Your commitment to continuous learning and improvement is especially commendable, and it sets a great example for the rest of the team. We truly value your contributions and look forward to your continued success and growth within the team.",
       name: "Mr. Mahesh Khattana",
       role: "Sr. IT Manager",
       company: "The Khyber Himalayan Resort & Spa"
