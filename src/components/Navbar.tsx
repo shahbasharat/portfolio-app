@@ -82,7 +82,7 @@ export default function Navbar() {
             ))}
             
             <a
-               href="/resume.pdf"
+               href="https://v0-basharat.vercel.app/resume"
                target="_blank"
                rel="noopener noreferrer"
                className="ml-2 lg:ml-4 px-5 py-2 text-sm font-medium text-black bg-white border border-white/20 rounded-full hover:bg-neutral-200 transition-all duration-300 font-semibold"
@@ -164,7 +164,7 @@ export default function Navbar() {
 
               <div className="mt-auto pt-16">
                 <a
-                  href="/resume.pdf"
+                  href="https://v0-basharat.vercel.app/resume"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block px-8 py-4 text-sm tracking-[0.2em] font-bold text-black bg-white hover:bg-neutral-200 rounded-full transition-all duration-300 text-center w-full shadow-[0_0_15px_rgba(255,255,255,0.1)]"

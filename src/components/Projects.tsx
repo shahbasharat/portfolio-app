@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { projects } from "@/data/projects";
 import { ArrowUpRight, Github, ExternalLink } from "lucide-react";
 
@@ -38,10 +39,12 @@ export default function Projects() {
               
               {/* Background Image */}
               {proj.imagePath && (
-                <img 
+                <Image 
                   src={proj.imagePath} 
                   alt={proj.title} 
-                  className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-105 group-hover:opacity-60 transition-all duration-700 z-0 pointer-events-none"
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
+                  className="absolute inset-0 object-cover opacity-40 group-hover:scale-105 group-hover:opacity-60 transition-all duration-700 z-0 pointer-events-none"
                 />
               )}
 

@@ -9,6 +9,8 @@ import ScrollProgress from "@/components/ScrollProgress";
 import { Analytics } from "@vercel/analytics/react";
 import ParticleBackground from "@/components/ParticleBackground";
 import KonamiCode from "@/components/KonamiCode";
+import Navbar from "@/components/Navbar";
+import FilmGrain from "@/components/FilmGrain";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -47,6 +49,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth scroll-pt-24">
       <body className={`${inter.className} bg-black text-white antialiased`}>
+        <FilmGrain />
+        <Navbar />
         <ParticleBackground />
         <LoadingScreen />
         <ScrollProgress />
@@ -56,6 +60,22 @@ export default function RootLayout({
         <ScrollToTop />
         {children}
         <Analytics />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              "name": "Basharat Salam",
+              "jobTitle": "System & Network Administrator",
+              "url": "https://v0-basharat.vercel.app",
+              "sameAs": [
+                "https://www.linkedin.com/in/basharatsalam",
+                "https://github.com/shahbasharat"
+              ]
+            })
+          }}
+        />
       </body>
     </html>
   );

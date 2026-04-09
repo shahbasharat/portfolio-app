@@ -1,6 +1,7 @@
 "use client";
 import ScrollyCanvas from "@/components/ScrollyCanvas";
 import Overlay from "@/components/Overlay";
+import CompanyTicker from "@/components/CompanyTicker";
 import Projects from "@/components/Projects";
 import About from "@/components/About";
 import Experience from "@/components/Experience";
@@ -17,6 +18,7 @@ export default function Home() {
         <Overlay />
       </div>
       <div className="relative z-20 bg-black">
+        <CompanyTicker />
         <About />
         <Experience />
         <Skills />

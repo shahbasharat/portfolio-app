@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Mail, Phone, Linkedin, Github, ShieldCheck, Loader2, CheckCircle, Download } from "lucide-react";
+import MagneticWrapper from "@/components/MagneticWrapper";
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -13,9 +14,27 @@ export default function Contact() {
     setFormStatus("idle");
 
     const formData = new FormData(e.currentTarget);
+    const botField = formData.get("bot-field");
+    
+    // Honeypot trap: if a bot fills out this hidden field, reject immediately
+    if (botField !== null && botField !== "") {
+      setFormStatus("error");
+      setIsSubmitting(false);
+      return;
+    }
+
+    const emailRaw = formData.get("email")?.toString() || "";
+    // Basic structural email validation since "required" and type="email" can be bypassed by scrapers
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailRaw)) {
+      setFormStatus("error");
+      setIsSubmitting(false);
+      return;
+    }
+
     const data = {
       name: formData.get("name"),
-      email: formData.get("email"),
+      email: emailRaw,
       message: formData.get("message"),
     };
 
@@ -93,32 +112,39 @@ export default function Contact() {
           </div>
 
           <div className="mt-12 flex flex-wrap items-center gap-4 md:gap-6">
-            <a 
-              href="/resume.pdf" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="px-6 py-3 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 rounded-full font-medium transition-all border border-blue-500/20 flex items-center gap-2 hover:shadow-[0_0_20px_rgba(37,99,235,0.2)]"
-            >
-              <Download className="w-5 h-5" />
-              Download Resume
-            </a>
+            <MagneticWrapper>
+              <a 
+                href="/resume.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="px-6 py-3 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 rounded-full font-medium transition-all border border-blue-500/20 flex items-center gap-2 hover:shadow-[0_0_20px_rgba(37,99,235,0.2)]"
+              >
+                <Download className="w-5 h-5" />
+                Download Resume
+              </a>
+            </MagneticWrapper>
             
-            <a 
-              href="https://www.linkedin.com/in/basharatsalam/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="p-3 rounded-full bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white transition-colors"
-            >
-              <Linkedin className="w-5 h-5" />
-            </a>
-            <a 
-              href="https://github.com/shahbasharat" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="p-3 rounded-full bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white transition-colors"
-            >
-              <Github className="w-5 h-5" />
-            </a>
+            <MagneticWrapper strength={0.4}>
+              <a 
+                href="https://www.linkedin.com/in/basharatsalam/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="p-3 rounded-full bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white transition-colors"
+               >
+                 <Linkedin className="w-5 h-5" />
+              </a>
+            </MagneticWrapper>
+            
+            <MagneticWrapper strength={0.4}>
+              <a 
+                href="https://github.com/shahbasharat" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="p-3 rounded-full bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white transition-colors"
+               >
+                 <Github className="w-5 h-5" />
+              </a>
+            </MagneticWrapper>
           </div>
         </div>
 
@@ -161,6 +187,16 @@ export default function Contact() {
                 />
               </div>
               
+              {/* Honeypot field (hidden from screen readers & users, but visible to naive bots) */}
+              <input 
+                type="text" 
+                name="bot-field" 
+                tabIndex={-1} 
+                className="hidden pointer-events-none" 
+                autoComplete="off" 
+                aria-hidden="true" 
+              />
+              
               <textarea 
                 name="message"
                 placeholder="Message..." 
@@ -171,20 +207,22 @@ export default function Contact() {
                 className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-neutral-500 focus:outline-none focus:border-blue-500/50 focus:bg-black/80 transition-all font-light resize-none disabled:opacity-50"
               />
               
-              <button 
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-4 rounded-xl transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.2)] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    Sending securely...
-                  </>
-                ) : (
-                  "Send Message"
-                )}
-              </button>
+              <MagneticWrapper className="w-full">
+                <button 
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-4 rounded-xl transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.2)] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Sending securely...
+                    </>
+                  ) : (
+                    "Send Message"
+                  )}
+                </button>
+              </MagneticWrapper>
 
               {formStatus === "error" && (
                 <p className="text-red-400 text-sm text-center mt-4">

@@ -1,6 +1,7 @@
 import { projects } from "@/data/projects";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 
 // Generate static params for optimal server rendering
@@ -61,11 +62,12 @@ export default function ProjectDetail({ params }: { params: { slug: string } }) 
           
           {project.imagePath ? (
             // Once user adds image path, this renders
-            // eslint-disable-next-line @next/next/no-img-element
-            <img 
+            <Image 
               src={project.imagePath} 
               alt={project.title}
-              className="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+              fill
+              sizes="(max-width: 1200px) 100vw, 80vw"
+              className="absolute inset-0 object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
             />
           ) : (
             <div className="relative z-10 flex flex-col items-center text-center p-6">
