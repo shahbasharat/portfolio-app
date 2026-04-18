@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
@@ -8,6 +10,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("Home");
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,6 +40,7 @@ export default function Navbar() {
     setActiveLink(name);
     setIsMobileMenuOpen(false);
   };
+  if (pathname === "/resume") return null;
 
   return (
     <>
@@ -81,15 +85,12 @@ export default function Navbar() {
               </a>
             ))}
             
-            <a
-               href="/resume.pdf"
-               download="Basharat_Resume.pdf"
-               target="_blank"
-               rel="noopener noreferrer"
+            <Link
+               href="/resume"
                className="ml-2 lg:ml-4 px-5 py-2 text-sm font-medium text-black bg-white border border-white/20 rounded-full hover:bg-neutral-200 transition-all duration-300 font-semibold"
             >
               Resume
-            </a>
+            </Link>
           </nav>
 
           {/* Mobile Hover / Staggered Hamburger Menu Toggle */}
@@ -164,15 +165,13 @@ export default function Navbar() {
               </nav>
 
               <div className="mt-auto pt-16">
-                <a
-                  href="/resume.pdf"
-                  download="Basharat_Resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/resume"
                   className="inline-block px-8 py-4 text-sm tracking-[0.2em] font-bold text-black bg-white hover:bg-neutral-200 rounded-full transition-all duration-300 text-center w-full shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                  onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  DOWNLOAD RESUME
-                </a>
+                  VIEW RESUME
+                </Link>
               </div>
             </motion.div>
           </motion.div>

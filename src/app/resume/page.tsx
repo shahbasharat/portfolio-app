@@ -15,11 +15,7 @@ export default function ResumePage() {
     <main className="resume-page min-h-screen bg-white text-black">
 
       {/* Action Bar - hidden when printing */}
-      <div className="print:hidden fixed top-0 left-0 right-0 z-50 bg-black text-white px-4 md:px-8 py-3 flex items-center justify-between">
-        <Link href="/" className="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm">
-          <ArrowLeft className="w-4 h-4" />
-          Back to Portfolio
-        </Link>
+      <div className="print:hidden fixed top-0 left-0 right-0 z-50 bg-black text-white px-4 md:px-8 py-3 flex items-center justify-end">
         <div className="flex items-center gap-3">
           <a href="/resume.pdf" download className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full text-sm transition-colors">
             <Download className="w-4 h-4" />
