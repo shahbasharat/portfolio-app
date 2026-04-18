@@ -61,7 +61,7 @@ export default function Education() {
             </p>
             
             <Link 
-              href="/certifications"
+              href="/cert"
               className="px-8 py-4 bg-white text-black font-semibold rounded-full flex items-center gap-2 hover:bg-neutral-200 transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] group/btn relative z-10"
             >
               View All Certificates

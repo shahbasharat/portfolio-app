@@ -1,98 +1,165 @@
 "use client";
-import React from "react";
-import { Award, ExternalLink, ArrowLeft } from "lucide-react";
+import React, { useEffect } from "react";
+import { Printer, Download, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 
-export default function Certifications() {
-  type Certification = { title: string; date: string; desc: string; link?: string };
-  const certifications: Certification[] = [
-    { title: "Google Cybersecurity Certificate", date: "Expected Jan 2026", desc: "SIEM, IDS/IPS, logging, phishing analysis, and network security concepts.", link: "https://www.coursera.org/professional-certificates/google-cybersecurity" },
-    { title: "Deloitte Australia Cyber Security Simulation", date: "Dec 2025", desc: "Log analysis, anomaly detection, and incident response.", link: "https://www.theforage.com/completion-certificates/9PBTqmSxAf6zZTseP/E9pA6qsdbeyEkp3ti_9PBTqmSxAf6zZTseP_69343bfa187d49737fe6d837_1765032736416_completion_certificate.pdf" },
-    { title: "SOC Fundamentals — LetsDefend", date: "May 2025", desc: "Threat monitoring, alert analysis, and SIEM fundamentals with hands-on investigations.", link: "https://app.letsdefend.io/my-rewards/detail/525ae7eebe0348739aa9bfb18b713d90" },
-    { title: "Pre-Security Path — TryHackMe", date: "Apr 2025", desc: "Cybersecurity fundamentals, OSI model, vulnerabilities, and Linux essentials.", link: "https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-1BTA7J4ZR2.pdf" },
-    { title: "TryHackMe Cybersecurity Training", date: "Apr 2025 - Present", desc: "Hands-on labs in Linux, web security, and threat detection.", link: "https://tryhackme.com/p/sbasharat577" },
-    { title: "Cisco Certified Network Associate Security (CCNA)", date: "Dec 2024", desc: "Device hardening, secure network design, VPN, and firewall fundamentals.", link: "https://drive.google.com/file/d/1CgWkiPgp339gQwJ-h_EJs8zII49aWgCU/view" },
-    { title: "Google Cloud Skill Badge", date: "Oct 2022", desc: "Hands-on experience with compute, IAM, storage, and networking.", link: "https://www.skills.google/public_profiles/324666f0-7a1f-49e4-abb7-3a26a9da505e" },
-    { title: "Introduction to Cybersecurity", date: "Oct 2022", desc: "Cisco fundamentals of threat landscape and network protection.", link: "https://www.credly.com/badges/317859ab-9a91-44f8-a7d8-1d68d3219fc9/linked_in_profile" }
-  ];
+export default function ResumePage() {
+  useEffect(() => {
+    document.body.style.cursor = "auto";
+    return () => {
+      document.body.style.cursor = "none";
+    };
+  }, []);
 
   return (
-    <main className="min-h-screen bg-black text-white relative py-24 px-4 md:px-24">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-gradient-to-b from-blue-900/20 to-transparent blur-[120px] pointer-events-none" />
-      <div className="max-w-6xl mx-auto relative z-10">
-        <Link href="/#education" className="inline-flex items-center gap-2 text-neutral-400 hover:text-white mb-12 transition-colors group cursor-pointer font-medium tracking-wide">
-          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+    <main className="resume-page min-h-screen bg-white text-black">
+
+      {/* Action Bar - hidden when printing */}
+      <div className="print:hidden fixed top-0 left-0 right-0 z-50 bg-black text-white px-4 md:px-8 py-3 flex items-center justify-between">
+        <Link href="/" className="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm">
+          <ArrowLeft className="w-4 h-4" />
           Back to Portfolio
         </Link>
-        <div className="mb-12 md:mb-20">
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-2xl md:text-6xl font-light mb-6 flex items-center gap-3 flex-wrap">
-            <Award className="w-8 h-8 md:w-14 md:h-14 text-blue-500 shrink-0" />
-            <span><span className="font-bold">Certifications</span> & Achievements</span>
-          </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-neutral-400 text-base md:text-xl max-w-3xl font-light leading-relaxed">
-            A comprehensive overview of my cybersecurity training, professional certifications, and practical job simulations reinforcing my technical expertise.
-          </motion.p>
+        <div className="flex items-center gap-3">
+          <a href="/resume.pdf" download className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full text-sm transition-colors">
+            <Download className="w-4 h-4" />
+            Download PDF
+          </a>
+          <button onClick={() => window.print()} className="inline-flex items-center gap-2 px-4 py-2 bg-white text-black rounded-full text-sm font-medium hover:bg-neutral-200 transition-colors">
+            <Printer className="w-4 h-4" />
+            Print
+          </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-16">
-          {certifications.map((cert, idx) => {
-            const CardContent = (
-              <>
-                <div className="flex flex-col gap-3 mb-4">
-                  <span className="inline-block self-start text-xs text-blue-400 font-mono tracking-wider bg-blue-900/20 border border-blue-500/20 px-3 py-1.5 rounded-full">
-                    {cert.date}
-                  </span>
-                  <h4 className="text-lg md:text-2xl text-white font-medium group-hover:text-blue-400 transition-colors leading-tight">
-                    {cert.title}
-                    {cert.link && <ExternalLink className="inline w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity text-blue-400" />}
-                  </h4>
-                </div>
-                <p className="text-neutral-400 text-sm md:text-lg leading-relaxed group-hover:text-neutral-300 transition-colors font-light">
-                  {cert.desc}
-                </p>
-              </>
-            );
-            return (
-              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4, delay: idx * 0.05 }} key={idx} className="h-full">
-                {cert.link ? (
-                  <a href={cert.link} target="_blank" rel="noopener noreferrer" className="block h-full bg-[#0d0d0d] border border-white/[0.05] p-6 md:p-10 rounded-3xl hover:bg-[#151515] hover:border-blue-500/40 transition-all duration-500 group cursor-pointer shadow-lg hover:shadow-[0_0_40px_rgba(37,99,235,0.1)] relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-bl-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="relative z-10">{CardContent}</div>
-                  </a>
-                ) : (
-                  <div className="h-full bg-[#0d0d0d] border border-white/[0.05] p-6 md:p-10 rounded-3xl hover:bg-[#151515] hover:border-white/20 transition-all duration-500 group shadow-lg relative overflow-hidden">
-                    <div className="relative z-10">{CardContent}</div>
-                  </div>
-                )}
-              </motion.div>
-            );
-          })}
+      </div>
+
+      {/* Resume Content */}
+      <div className="pt-16 print:pt-0 max-w-4xl mx-auto px-6 md:px-12 py-12 print:py-6">
+
+        {/* Header */}
+        <div className="border-b border-gray-200 pb-6 mb-6">
+          <h1 className="text-3xl md:text-4xl font-bold text-black mb-1">Basharat Salam</h1>
+          <p className="text-gray-600 text-base md:text-lg mb-3">System & Network Administrator</p>
+          <div className="flex flex-wrap gap-3 text-sm text-gray-500">
+            <span>Srinagar, Jammu & Kashmir</span>
+            <span>shahbasharat577@gmail.com</span>
+            <span>v0-basharat.vercel.app</span>
+            <span>+91 7006271979</span>
+          </div>
         </div>
 
-        {/* TryHackMe Badge Section */}
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="border-t border-white/[0.05] pt-12">
-          <h2 className="text-sm uppercase tracking-[0.2em] text-neutral-500 mb-6">Live Training Profile</h2>
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-8 bg-[#0d0d0d] border border-white/[0.05] p-6 md:p-10 rounded-3xl">
-            <div className="shrink-0">
-              <a href="https://tryhackme.com/p/sbasharat577" target="_blank" rel="noopener noreferrer">
-                <img src="https://tryhackme-badges.s3.amazonaws.com/sbasharat577.png" alt="TryHackMe Badge" className="w-48 md:w-56 rounded-xl hover:scale-105 transition-transform duration-300" />
-              </a>
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-green-400 text-sm font-mono">Active Learner</span>
+        {/* Profile Summary */}
+        <div className="mb-6">
+          <h2 className="text-lg font-bold text-black uppercase tracking-wider mb-3 border-b border-gray-200 pb-1">Profile Summary</h2>
+          <p className="text-gray-600 text-sm leading-relaxed">
+            Technical Support Specialist with a strong background in IT and network administration. Skilled in troubleshooting hardware, software, and network issues to ensure system reliability and user satisfaction. Experienced in endpoint management, VPN configuration, and firewall administration.
+          </p>
+        </div>
+
+        {/* Experience */}
+        <div className="mb-6">
+          <h2 className="text-lg font-bold text-black uppercase tracking-wider mb-3 border-b border-gray-200 pb-1">Work Experience</h2>
+          <div className="space-y-5">
+            <div>
+              <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-1">
+                <h3 className="font-semibold text-black">Executive Information Technology</h3>
+                <span className="text-gray-500 text-sm">Aug 2025 - Present</span>
               </div>
-              <h3 className="text-xl md:text-2xl font-semibold text-white mb-2">TryHackMe — sbasharat577</h3>
-              <p className="text-neutral-400 text-sm md:text-base font-light leading-relaxed mb-4">
-                Actively completing hands-on cybersecurity labs and CTF-style challenges. Practicing real-world skills across networking, Linux, web security, and threat detection.
-              </p>
-              <a href="https://tryhackme.com/p/sbasharat577" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full text-sm text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300">
-                View Profile <ExternalLink className="w-4 h-4" />
-              </a>
+              <p className="text-gray-600 text-sm mb-2">The Khyber Himalayan Resort & Spa · Gulmarg, J&K</p>
+              <ul className="list-disc list-inside text-gray-600 text-sm space-y-1">
+                <li>Performed daily IT operations and system monitoring including health checks and backups.</li>
+                <li>Managed wired and wireless network infrastructure using Ruckus access points and switches.</li>
+                <li>Handled user account and access management through Active Directory.</li>
+                <li>Provided technical support for hospitality systems including Wi-Fi portals and POS systems.</li>
+              </ul>
+            </div>
+            <div>
+              <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-1">
+                <h3 className="font-semibold text-black">Executive Information Technology</h3>
+                <span className="text-gray-500 text-sm">Mar 2025 - Aug 2025</span>
+              </div>
+              <p className="text-gray-600 text-sm mb-2">Skyview by Empyrean · Srinagar, J&K</p>
+              <ul className="list-disc list-inside text-gray-600 text-sm space-y-1">
+                <li>Administered and secured corporate networks using Sophos firewall and IDS/IPS monitoring.</li>
+                <li>Managed Seqrite EDR platform for enterprise endpoint protection.</li>
+                <li>Oversaw Ruckus switch controllers and ANTlabs Wi-Fi gateways.</li>
+                <li>Conducted daily security monitoring and alert triage from EDR and firewall logs.</li>
+              </ul>
+            </div>
+            <div>
+              <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-1">
+                <h3 className="font-semibold text-black">Technical Advisor</h3>
+                <span className="text-gray-500 text-sm">Jan 2024 - Feb 2025</span>
+              </div>
+              <p className="text-gray-600 text-sm mb-2">Ison Xperience (Client: Etisalat) · Bengaluru, India</p>
+              <ul className="list-disc list-inside text-gray-600 text-sm space-y-1">
+                <li>Resolved customer complaints related to Wi-Fi and internet services for labor camp users.</li>
+                <li>Provided Wi-Fi setup, troubleshooting, and support for large-scale accommodations.</li>
+                <li>Diagnosed signal strength, bandwidth distribution, and user isolation issues.</li>
+              </ul>
             </div>
           </div>
-        </motion.div>
+        </div>
+
+        {/* Skills */}
+        <div className="mb-6">
+          <h2 className="text-lg font-bold text-black uppercase tracking-wider mb-3 border-b border-gray-200 pb-1">Skills</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <div>
+              <span className="font-semibold text-black">Networking: </span>
+              <span className="text-gray-600">OSI Model, TCP/IP, LAN/WAN, DNS, DHCP, Ruckus</span>
+            </div>
+            <div>
+              <span className="font-semibold text-black">Security: </span>
+              <span className="text-gray-600">Sophos Firewall, Endpoint Protection, Site-to-Site VPN, IDS/IPS</span>
+            </div>
+            <div>
+              <span className="font-semibold text-black">Systems: </span>
+              <span className="text-gray-600">Windows Server, Linux (Ubuntu/Kali), Active Directory, Seqrite EDR</span>
+            </div>
+            <div>
+              <span className="font-semibold text-black">IT Support: </span>
+              <span className="text-gray-600">Troubleshooting, Wi-Fi Config, Backup & Recovery, Avaya CRM</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Certifications */}
+        <div className="mb-6">
+          <h2 className="text-lg font-bold text-black uppercase tracking-wider mb-3 border-b border-gray-200 pb-1">Certifications</h2>
+          <ul className="space-y-2 text-sm text-gray-600">
+            <li className="flex flex-col md:flex-row md:justify-between"><span>Cisco Certified Network Associate Security (CCNA)</span><span className="text-gray-400">Dec 2024</span></li>
+            <li className="flex flex-col md:flex-row md:justify-between"><span>SOC Fundamentals — LetsDefend</span><span className="text-gray-400">May 2025</span></li>
+            <li className="flex flex-col md:flex-row md:justify-between"><span>Pre-Security Path — TryHackMe</span><span className="text-gray-400">Apr 2025</span></li>
+            <li className="flex flex-col md:flex-row md:justify-between"><span>Deloitte Australia Cyber Security Simulation</span><span className="text-gray-400">Dec 2025</span></li>
+            <li className="flex flex-col md:flex-row md:justify-between"><span>Google Cybersecurity Certificate</span><span className="text-gray-400">Expected Jan 2026</span></li>
+          </ul>
+        </div>
+
+        {/* Education */}
+        <div className="mb-6">
+          <h2 className="text-lg font-bold text-black uppercase tracking-wider mb-3 border-b border-gray-200 pb-1">Education</h2>
+          <div className="space-y-3 text-sm">
+            <div className="flex flex-col md:flex-row md:justify-between">
+              <div>
+                <p className="font-semibold text-black">Bachelors of Computer Applications</p>
+                <p className="text-gray-600">University of Kashmir</p>
+              </div>
+              <span className="text-gray-400">May 2024</span>
+            </div>
+            <div className="flex flex-col md:flex-row md:justify-between">
+              <div>
+                <p className="font-semibold text-black">One Year Diploma in Computer Applications</p>
+                <p className="text-gray-600">NIELIT</p>
+              </div>
+              <span className="text-gray-400">Dec 2020</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="print:block hidden border-t border-gray-200 pt-4 text-center text-xs text-gray-400">
+          v0-basharat.vercel.app · shahbasharat577@gmail.com
+        </div>
 
       </div>
     </main>
