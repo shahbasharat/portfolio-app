@@ -3,10 +3,28 @@
 import React, { useState } from "react";
 import { Mail, Phone, Linkedin, Github, ShieldCheck, Loader2, CheckCircle, Download } from "lucide-react";
 import MagneticWrapper from "@/components/MagneticWrapper";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState<"idle" | "success" | "error">("idle");
+  const [emailValue, setEmailValue] = useState("");
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [copiedText, setCopiedText] = useState<string | null>(null);
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEmailValue(value);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setIsEmailValid(emailRegex.test(value));
+  };
+
+  const handleCopy = (text: string, label: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedText(label);
+      setTimeout(() => setCopiedText(null), 2000);
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -104,11 +122,31 @@ export default function Contact() {
           
           <div className="space-y-4 text-lg font-light">
             <p className="text-neutral-400">Srinagar Jammu and Kashmir</p>
-            <p>
+            <div className="flex items-center gap-2 group">
               <a href="mailto:shahbasharat577@gmail.com" className="text-blue-400 hover:text-blue-300 transition-colors">
                 shahbasharat577@gmail.com
               </a>
-            </p>
+              <button 
+                onClick={() => handleCopy("shahbasharat577@gmail.com", "email")}
+                className="text-neutral-500 hover:text-white transition-colors relative p-1.5"
+                title="Copy email to clipboard"
+                aria-label="Copy email"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                <AnimatePresence>
+                  {copiedText === "email" && (
+                    <motion.span 
+                      initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                      animate={{ opacity: 1, y: -28, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      className="absolute left-1/2 -translate-x-1/2 px-2 py-0.5 bg-blue-600 text-white text-[10px] font-mono rounded font-semibold uppercase tracking-wider shadow-lg"
+                    >
+                      Copied!
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </button>
+            </div>
           </div>
 
           <div className="mt-12 flex flex-wrap items-center gap-4 md:gap-6">
@@ -176,15 +214,34 @@ export default function Contact() {
                   disabled={isSubmitting}
                   className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-neutral-500 focus:outline-none focus:border-blue-500/50 focus:bg-black/80 transition-all font-light disabled:opacity-50"
                 />
-                <input 
-                  type="email" 
-                  name="email"
-                  placeholder="Youremail@email.com" 
-                  aria-label="Your Email Address"
-                  required
-                  disabled={isSubmitting}
-                  className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-neutral-500 focus:outline-none focus:border-blue-500/50 focus:bg-black/80 transition-all font-light disabled:opacity-50"
-                />
+                <div className="w-full relative flex items-center">
+                  <input 
+                    type="email" 
+                    name="email"
+                    placeholder="Youremail@email.com" 
+                    aria-label="Your Email Address"
+                    required
+                    value={emailValue}
+                    onChange={handleEmailChange}
+                    disabled={isSubmitting}
+                    className={`w-full bg-black/50 border rounded-xl px-4 py-4 pr-10 text-white placeholder-neutral-500 focus:outline-none focus:bg-black/80 transition-all font-light disabled:opacity-50 ${
+                      emailValue === ""
+                        ? "border-white/10 focus:border-blue-500/50"
+                        : isEmailValid
+                          ? "border-emerald-500/30 focus:border-emerald-500/60"
+                          : "border-red-500/30 focus:border-red-500/60"
+                    }`}
+                  />
+                  {emailValue !== "" && (
+                    <span className="absolute right-4 text-xs font-mono select-none">
+                      {isEmailValid ? (
+                        <span className="text-emerald-400 animate-in fade-in zoom-in duration-300">✓</span>
+                      ) : (
+                        <span className="text-red-400 animate-in fade-in zoom-in duration-300">✗</span>
+                      )}
+                    </span>
+                  )}
+                </div>
               </div>
               
               {/* Honeypot field (hidden from screen readers & users, but visible to naive bots) */}
