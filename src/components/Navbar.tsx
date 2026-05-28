@@ -25,6 +25,10 @@ export default function Navbar() {
     { name: "About", href: "#about" },
     { name: "Experience", href: "#experience" },
     { name: "Skills", href: "#skills" },
+    { name: "Network Lab", href: "#network-lab" },
+    { name: "SOC Monitor", href: "#soc-monitor" },
+    { name: "Auditing", href: "#vuln-scanner" },
+    { name: "Forensics", href: "#ad-forensics" },
     { name: "Projects", href: "#projects" },
     { name: "Education", href: "#education" },
     { name: "Contact", href: "#contact" },
@@ -37,7 +41,25 @@ export default function Navbar() {
       return;
     }
 
-    const sectionIds = ["about", "experience", "skills", "projects", "education", "contact"];
+    const sectionIds = [
+      "about", "experience", "skills", "network-lab", 
+      "soc-monitor", "vuln-scanner", "ad-forensics", 
+      "projects", "education", "contact"
+    ];
+    
+    const idToName: Record<string, string> = {
+      about: "About",
+      experience: "Experience",
+      skills: "Skills",
+      "network-lab": "Network Lab",
+      "soc-monitor": "SOC Monitor",
+      "vuln-scanner": "Auditing",
+      "ad-forensics": "Forensics",
+      projects: "Projects",
+      education: "Education",
+      contact: "Contact"
+    };
+
     const observers: IntersectionObserver[] = [];
 
     // Small delay to ensure DOM has rendered after transition
@@ -48,8 +70,7 @@ export default function Navbar() {
         const obs = new IntersectionObserver(
           ([entry]) => {
             if (entry.isIntersecting) {
-              // Capitalize first letter to match navLink names
-              setActiveLink(id.charAt(0).toUpperCase() + id.slice(1));
+              setActiveLink(idToName[id] || id);
             }
           },
           { threshold: 0.35 }
@@ -101,13 +122,13 @@ export default function Navbar() {
           </button>
 
           {/* Desktop Navigation - Horizontal layout */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2 z-[110]">
+          <nav className="hidden xl:flex items-center gap-0.5 lg:gap-1 z-[110]">
             {navLinks.map((link, index) => (
               <Link
                 key={index}
                 href={pathname === "/" ? link.href : `/${link.href}`}
                 onClick={() => handleNavClick(link.name)}
-                className="relative px-3 lg:px-4 py-2 text-sm font-medium text-neutral-400 hover:text-white transition-colors tracking-wide group"
+                className="relative px-2 lg:px-3.5 py-2 text-xs lg:text-sm font-medium text-neutral-400 hover:text-white transition-colors tracking-wide group"
               >
                 <span className="relative z-10">{link.name}</span>
                 <span className="absolute inset-0 bg-white/[0.08] rounded-full scale-50 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 ease-out z-0" />
