@@ -14,6 +14,7 @@ export default function Experience() {
       company: "The Khyber Himalayan Resort & Spa",
       location: "Gulmarg, J&K",
       date: "Aug 2025 - Present",
+      tags: ["Sophos XG", "Seqrite EDR", "Ruckus", "Active Directory", "VPN", "Windows Server"],
       bullets: [
         "Performed daily IT operations and system monitoring including server health checks, scheduled backups, and uptime tracking to ensure smooth resort operations.",
         "Managed wired and wireless network infrastructure by monitoring Ruckus access points, switches, and the Antlab SG5 Gateway, ensuring uninterrupted guest and staff connectivity.",
@@ -30,6 +31,7 @@ export default function Experience() {
       company: "Skyview by Empyrean",
       location: "Srinagar, J&K",
       date: "Mar 2025 - Aug 2025",
+      tags: ["Sophos Firewall", "IDS/IPS", "Seqrite EDR", "Ruckus", "ANTlabs", "Backup"],
       bullets: [
         "Administered and secured the corporate network by managing the Sophos firewall, monitoring Intrusion Detection/Prevention Systems (IDS/IPS), and overseeing the Seqrite Endpoint Detection & Response (EDR) platform.",
         "Oversaw all wired and wireless network infrastructure, including Ruckus switch controllers and the ANTlabs Wi-Fi gateway, ensuring seamless connectivity for employees and guests.",
@@ -44,6 +46,7 @@ export default function Experience() {
       company: "Ison Xperience (Client: Etisalat)",
       location: "Bengaluru, India",
       date: "Jan 2024 - Feb 2025",
+      tags: ["Wi-Fi Troubleshooting", "CRM", "Network Diagnostics", "Customer Support"],
       bullets: [
         "Handled customer complaints and connectivity issues related to WiFi and internet service for Etisalat labor camp users.",
         "Provided WiFi setup, troubleshooting, and support for large-scale shared accommodations across labour camps.",
@@ -109,10 +112,19 @@ export default function Experience() {
                         </motion.div>
                       </div>
 
-                      <h4 className="text-base md:text-lg text-neutral-400 mb-6 font-medium">
+                      <h4 className="text-base md:text-lg text-neutral-400 mb-4 font-medium">
                         {exp.company}
                         <span className="text-neutral-600 text-sm ml-2 font-light">| {exp.location}</span>
                       </h4>
+
+                      {/* Tech Tag Badges */}
+                      <div className="flex flex-wrap gap-2 mb-5">
+                        {exp.tags.map((tag) => (
+                          <span key={tag} className="inline-flex items-center px-2.5 py-1 text-[11px] font-mono tracking-wide text-neutral-400 bg-neutral-800/80 border border-white/[0.06] rounded-full group-hover:border-white/10 transition-colors">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
 
                       <ul className="space-y-3 text-neutral-400 font-light text-sm md:text-base leading-relaxed">
                         {visibleBullets.map((b, i) => (

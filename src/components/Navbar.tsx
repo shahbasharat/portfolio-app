@@ -9,7 +9,7 @@ import { X } from "lucide-react";
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState("Home");
+  const [activeLink, setActiveLink] = useState("");
   const pathname = usePathname();
 
   useEffect(() => {
@@ -30,9 +30,44 @@ export default function Navbar() {
     { name: "Contact", href: "#contact" },
   ];
 
+  // Auto-detect active section via IntersectionObserver
+  useEffect(() => {
+    if (pathname !== "/") {
+      setActiveLink("");
+      return;
+    }
+
+    const sectionIds = ["about", "experience", "skills", "projects", "education", "contact"];
+    const observers: IntersectionObserver[] = [];
+
+    // Small delay to ensure DOM has rendered after transition
+    const timer = setTimeout(() => {
+      sectionIds.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const obs = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting) {
+              // Capitalize first letter to match navLink names
+              setActiveLink(id.charAt(0).toUpperCase() + id.slice(1));
+            }
+          },
+          { threshold: 0.35 }
+        );
+        obs.observe(el);
+        observers.push(obs);
+      });
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      observers.forEach((o) => o.disconnect());
+    };
+  }, [pathname]);
+
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    setActiveLink("Home");
+    setActiveLink("");
     setIsMobileMenuOpen(false);
   };
   
@@ -68,9 +103,9 @@ export default function Navbar() {
           {/* Desktop Navigation - Horizontal layout */}
           <nav className="hidden md:flex items-center gap-1 lg:gap-2 z-[110]">
             {navLinks.map((link, index) => (
-              <a
+              <Link
                 key={index}
-                href={link.href}
+                href={pathname === "/" ? link.href : `/${link.href}`}
                 onClick={() => handleNavClick(link.name)}
                 className="relative px-3 lg:px-4 py-2 text-sm font-medium text-neutral-400 hover:text-white transition-colors tracking-wide group"
               >
@@ -82,7 +117,7 @@ export default function Navbar() {
                     className="absolute bottom-1 left-4 right-4 h-px bg-white/80 z-10" 
                   />
                 )}
-              </a>
+              </Link>
             ))}
             
             <Link
@@ -139,9 +174,9 @@ export default function Navbar() {
                 {navLinks.map((link) => {
                   const isActive = activeLink === link.name;
                   return (
-                    <a
+                    <Link
                       key={link.name}
-                      href={link.href}
+                      href={pathname === "/" ? link.href : `/${link.href}`}
                       onClick={(e) => {
                         handleNavClick(link.name);
                       }}
@@ -159,7 +194,7 @@ export default function Navbar() {
                           className="w-3 h-3 bg-white rounded-full ml-2"
                         />
                       )}
-                    </a>
+                    </Link>
                   );
                 })}
               </nav>

@@ -1,6 +1,14 @@
 "use client";
 import React, { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+
+const ROLES = [
+  "System Administrator.",
+  "Network Administrator.",
+  "SOC Analyst.",
+  "IT Infrastructure Lead.",
+];
 
 function TypingText({ text, className }: { text: string; className?: string }) {
   const [displayed, setDisplayed] = useState("");
@@ -32,6 +40,33 @@ function TypingText({ text, className }: { text: string; className?: string }) {
   );
 }
 
+function RoleCycler() {
+  const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    // Each role stays for 3.5s then fades for 0.4s then switches
+    const timer = setInterval(() => {
+      setVisible(false);
+      setTimeout(() => {
+        setIndex((i) => (i + 1) % ROLES.length);
+        setVisible(true);
+      }, 400);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <motion.span
+      animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : -8 }}
+      transition={{ duration: 0.35 }}
+      className="inline-block text-neutral-400"
+    >
+      {ROLES[index]}
+    </motion.span>
+  );
+}
+
 export default function Overlay() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -50,7 +85,7 @@ export default function Overlay() {
     <div ref={containerRef} className="absolute inset-0 z-10 pointer-events-none h-full">
       <div className="sticky top-0 h-screen w-full flex items-center justify-center pointer-events-none px-6 md:px-24">
 
-        {/* Sequence 1: Hero with typing animation */}
+        {/* Sequence 1: Hero with typing animation + role cycler */}
         <motion.div
           className="absolute text-center px-4"
           style={{ opacity: heroOpacity, y: heroY }}
@@ -62,10 +97,27 @@ export default function Overlay() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.4, duration: 0.8 }}
-            className="mt-4 text-base sm:text-lg md:text-3xl font-light tracking-wide text-neutral-400"
+            className="mt-4 text-base sm:text-lg md:text-3xl font-light tracking-wide"
           >
-            System Admin <span className="text-white/20 mx-1 md:mx-2">|</span> Network Administrator.
+            <RoleCycler />
           </motion.p>
+
+          {/* Scroll hint arrow */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.2, duration: 0.8 }}
+            className="mt-12 flex justify-center"
+          >
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              className="flex flex-col items-center gap-1 text-neutral-600"
+            >
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em]">Scroll</span>
+              <ChevronDown className="w-4 h-4" />
+            </motion.div>
+          </motion.div>
         </motion.div>
 
         {/* Sequence 2: Vision */}

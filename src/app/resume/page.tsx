@@ -15,13 +15,24 @@ export default function ResumePage() {
     <main className="resume-page min-h-screen bg-white text-black">
 
       {/* Action Bar - hidden when printing */}
-      <div className="print:hidden fixed top-0 left-0 right-0 z-50 bg-black text-white px-4 md:px-8 py-3 flex items-center justify-end">
+      <div className="print:hidden fixed top-0 left-0 right-0 z-50 bg-black text-white px-4 md:px-8 py-3 flex items-center justify-between">
+        <Link href="/" className="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm">
+          <ArrowLeft className="w-4 h-4" />
+          Back to Portfolio
+        </Link>
         <div className="flex items-center gap-3">
-          <a href="/resume.pdf" download className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full text-sm transition-colors">
+          <a
+            href="/resume.pdf"
+            download="Basharat_Salam_Resume.pdf"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-full text-sm transition-colors"
+          >
             <Download className="w-4 h-4" />
             Download PDF
           </a>
-          <button onClick={() => window.print()} className="inline-flex items-center gap-2 px-4 py-2 bg-white text-black rounded-full text-sm font-medium hover:bg-neutral-200 transition-colors">
+          <button
+            onClick={() => window.print()}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white text-black rounded-full text-sm font-medium hover:bg-neutral-200 transition-colors"
+          >
             <Printer className="w-4 h-4" />
             Print
           </button>
@@ -38,7 +49,7 @@ export default function ResumePage() {
           <div className="flex flex-wrap gap-3 text-sm text-gray-500">
             <span>Srinagar, Jammu & Kashmir</span>
             <span>shahbasharat577@gmail.com</span>
-            <span>v0-basharat.vercel.app</span>
+          <span>basharatsalam.vercel.app</span>
             <span>+91 7006271979</span>
           </div>
         </div>
@@ -154,7 +165,7 @@ export default function ResumePage() {
 
         {/* Footer */}
         <div className="print:block hidden border-t border-gray-200 pt-4 text-center text-xs text-gray-400">
-          v0-basharat.vercel.app · shahbasharat577@gmail.com
+          basharatsalam.vercel.app · shahbasharat577@gmail.com
         </div>
 
       </div>

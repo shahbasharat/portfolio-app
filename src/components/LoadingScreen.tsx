@@ -2,6 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+const STAGES = [
+  { progress: [0, 30],   label: "Establishing secure connection..." },
+  { progress: [30, 60],  label: "Loading system modules..." },
+  { progress: [60, 85],  label: "Verifying credentials..." },
+  { progress: [85, 100], label: "Launching portfolio..." },
+];
+
 export default function LoadingScreen() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
@@ -11,7 +18,7 @@ export default function LoadingScreen() {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setTimeout(() => setLoading(false), 400);
+          setTimeout(() => setLoading(false), 500);
           return 100;
         }
         return prev + 2;
@@ -19,6 +26,10 @@ export default function LoadingScreen() {
     }, 30);
     return () => clearInterval(interval);
   }, []);
+
+  const currentLabel = STAGES.find(
+    (s) => progress >= s.progress[0] && progress < s.progress[1]
+  )?.label ?? "Launching portfolio...";
 
   return (
     <AnimatePresence>
@@ -73,7 +84,7 @@ export default function LoadingScreen() {
               transition={{ delay: 0.5, duration: 0.6 }}
               className="text-neutral-500 text-xs sm:text-sm tracking-[0.2em] uppercase mb-10 md:mb-12 text-center"
             >
-              System & Network Administrator
+              System &amp; Network Administrator
             </motion.p>
 
             {/* Progress bar */}
@@ -90,9 +101,20 @@ export default function LoadingScreen() {
                   transition={{ ease: "linear" }}
                 />
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-neutral-600 text-xs font-mono">Initializing...</span>
-                <span className="text-neutral-400 text-xs font-mono">{progress}%</span>
+              <div className="flex justify-between items-center gap-2">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={currentLabel}
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.2 }}
+                    className="text-neutral-500 text-xs font-mono truncate"
+                  >
+                    {currentLabel}
+                  </motion.span>
+                </AnimatePresence>
+                <span className="text-neutral-400 text-xs font-mono shrink-0">{progress}%</span>
               </div>
             </motion.div>
 
@@ -105,7 +127,7 @@ export default function LoadingScreen() {
             transition={{ delay: 0.8 }}
             className="absolute bottom-6 md:bottom-8 text-neutral-700 text-xs tracking-[0.2em] uppercase font-mono text-center px-4"
           >
-            Secured & Monitored
+            basharatsalam.vercel.app
           </motion.p>
 
         </motion.div>

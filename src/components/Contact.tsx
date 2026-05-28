@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Mail, Phone, Linkedin, Github, ShieldCheck, Loader2, CheckCircle, Download } from "lucide-react";
 import MagneticWrapper from "@/components/MagneticWrapper";
 import { motion, AnimatePresence } from "framer-motion";
@@ -292,16 +292,61 @@ export default function Contact() {
         </div>
       </div>
 
+      {/* Network Diagnostics Widget */}
+      <div className="relative z-10 max-w-7xl mx-auto mt-16 mb-0">
+        <NetDiagnostics />
+      </div>
+
       {/* Footer Bottom */}
-      <div className="relative z-10 max-w-7xl mx-auto mt-32 pt-8 border-t border-white/[0.05] flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-neutral-600 font-light">
+      <div className="relative z-10 max-w-7xl mx-auto mt-8 pt-8 border-t border-white/[0.05] flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-neutral-600 font-light">
         <p>© {new Date().getFullYear()} Basharat Salam. All rights reserved.</p>
         <p className="text-neutral-600 text-xs font-mono">
-          Last updated: April 2026
+          Last updated: May 2026
         </p>
         <p className="flex items-center gap-2 text-neutral-500">
-          <ShieldCheck className="w-4 h-4" /> Secured & Monitored
+          <ShieldCheck className="w-4 h-4" /> Secured &amp; Monitored
         </p>
       </div>
     </footer>
+  );
+}
+
+function NetDiagnostics() {
+  const [ip, setIp] = useState<string>("—");
+  const [ping, setPing] = useState<string>("—");
+
+  useEffect(() => {
+    // Fetch public IP
+    fetch("https://api.ipify.org?format=json")
+      .then((r) => r.json())
+      .then((d) => setIp(d.ip))
+      .catch(() => setIp("Unavailable"));
+
+    // Measure latency by pinging the contact API
+    const start = performance.now();
+    fetch("/api/contact", { method: "HEAD" })
+      .then(() => setPing(`${Math.round(performance.now() - start)}ms`))
+      .catch(() => setPing("—"));
+  }, []);
+
+  const stats = [
+    { label: "YOUR IP", value: ip },
+    { label: "LATENCY", value: ping },
+    { label: "PROTOCOL", value: "HTTPS / TLS 1.3" },
+    { label: "GATEWAY", value: "ONLINE", pulse: true },
+  ];
+
+  return (
+    <div className="border border-white/[0.05] rounded-2xl px-6 py-4 bg-[#080808] flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-0 sm:divide-x sm:divide-white/[0.05]">
+      {stats.map((s) => (
+        <div key={s.label} className="flex flex-col sm:px-6 first:pl-0 last:pr-0 gap-1 min-w-[120px]">
+          <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-600">{s.label}</span>
+          <span className="text-xs font-mono text-white flex items-center gap-2">
+            {s.pulse && <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />}
+            {s.value}
+          </span>
+        </div>
+      ))}
+    </div>
   );
 }

@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Globe, Shield, Server, Network, ShieldCheck, 
-  Cpu, Activity, Radio, Key, HardDrive, AlertTriangle
+  Activity, Radio, Key, HardDrive, ShieldAlert,
+  Play, RotateCcw, AlertTriangle, ArrowRight, ToggleLeft, ToggleRight
 } from "lucide-react";
 
 type NodeId = "wan" | "firewall" | "switch" | "server" | "endpoints";
@@ -22,6 +23,115 @@ interface NodeDetail {
 
 export default function NetworkTopology() {
   const [activeNode, setActiveNode] = useState<NodeId | null>(null);
+  
+  // Traceroute States
+  const [traceDest, setTraceDest] = useState<"google" | "ad" | "malicious">("google");
+  const [traceProgress, setTraceProgress] = useState<number>(-1); // -1 = idle
+  const [traceLogs, setTraceLogs] = useState<string[]>([]);
+  const [isTracing, setIsTracing] = useState(false);
+  const [firewallAlarm, setFirewallAlarm] = useState(false);
+
+  // GPO Configurator States
+  const [gpos, setGpos] = useState({
+    passwordComplexity: true,
+    usbBlocking: false,
+    powershellRestriction: false,
+    edrEnforcement: true,
+  });
+
+  const getComplianceScore = () => {
+    let score = 50; // Base score
+    if (gpos.passwordComplexity) score += 15;
+    if (gpos.usbBlocking) score += 15;
+    if (gpos.powershellRestriction) score += 10;
+    if (gpos.edrEnforcement) score += 10;
+    return score;
+  };
+
+  const handleGpoToggle = (key: keyof typeof gpos) => {
+    setGpos((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  // Run Traceroute simulation
+  const startTraceroute = () => {
+    if (isTracing) return;
+    setIsTracing(true);
+    setTraceProgress(0);
+    setFirewallAlarm(false);
+    
+    let destIP = "";
+    let destName = "";
+    if (traceDest === "google") {
+      destIP = "8.8.8.8";
+      destName = "google-dns.com";
+    } else if (traceDest === "ad") {
+      destIP = "192.168.1.10";
+      destName = "ad-host.corp.khyber.local";
+    } else {
+      destIP = "185.220.101.4";
+      destName = "tor-exit-node.onion";
+    }
+
+    setTraceLogs([`Tracing route to ${destName} [${destIP}] over a maximum of 30 hops:`]);
+
+    // Hop 1: WAN Gateway
+    setTimeout(() => {
+      setTraceProgress(1);
+      setTraceLogs((prev) => [...prev, "  1     2 ms     1 ms     1 ms  wan.local [103.88.241.1]"]);
+    }, 1000);
+
+    // Hop 2: Sophos Firewall
+    setTimeout(() => {
+      setTraceProgress(2);
+      setTraceLogs((prev) => [...prev, "  2     4 ms     3 ms     3 ms  sophos-xg135.local [192.168.1.1]"]);
+      
+      if (traceDest === "malicious") {
+        setTimeout(() => {
+          setFirewallAlarm(true);
+          setTraceLogs((prev) => [
+            ...prev, 
+            "  *     *     *     Request timed out.",
+            "⛔ [FIREWALL ALERT] Access Denied: Sophos Policy ID 42 (Malicious IP Block) blocked packet transmission."
+          ]);
+          setIsTracing(false);
+        }, 1000);
+      }
+    }, 2000);
+
+    if (traceDest === "malicious") return;
+
+    // Hop 3: Core Switch
+    setTimeout(() => {
+      setTraceProgress(3);
+      setTraceLogs((prev) => [...prev, "  3     5 ms     5 ms     4 ms  core-switch.local [192.168.1.5]"]);
+    }, 3000);
+
+    // Hop 4: Server Host or Endpoints (Final Destination)
+    setTimeout(() => {
+      setTraceProgress(4);
+      if (traceDest === "ad") {
+        setTraceLogs((prev) => [
+          ...prev, 
+          "  4     6 ms     6 ms     7 ms  ad-host.corp.khyber.local [192.168.1.10]",
+          "✓ Trace complete. Target reached successfully."
+        ]);
+      } else {
+        setTraceLogs((prev) => [
+          ...prev, 
+          "  4     8 ms     7 ms     7 ms  google-dns.com [8.8.8.8]",
+          "✓ Trace complete. Target reached successfully."
+        ]);
+      }
+      setIsTracing(false);
+    }, 4000);
+  };
+
+  const resetTraceroute = () => {
+    setTraceProgress(-1);
+    setTraceLogs([]);
+    setIsTracing(false);
+    setFirewallAlarm(false);
+  };
 
   const nodeDetails: Record<NodeId, NodeDetail> = {
     wan: {
@@ -154,8 +264,11 @@ export default function NetworkTopology() {
           <div className="lg:col-span-2 bg-[#050505] border border-white/[0.05] rounded-3xl p-6 md:p-10 flex flex-col justify-between min-h-[480px] shadow-2xl relative overflow-hidden">
             {/* Visual Header */}
             <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-6 text-xs text-neutral-500 font-mono">
-              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" /> SIMULATION: RUNNING</span>
-              <span>NETWORK STATUS: SECURED</span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" /> 
+                SIMULATION: RUNNING
+              </span>
+              <span>NETWORK STATUS: {firewallAlarm ? "⚠️ ATTACK BLOCKED" : "SECURED"}</span>
             </div>
 
             {/* Interactive SVG Diagram */}
@@ -171,10 +284,10 @@ export default function NetworkTopology() {
                 <path d="M 120 225 L 280 225" stroke="#171717" strokeWidth="3" />
                 <path 
                   d="M 120 225 L 280 225" 
-                  stroke="#3b82f6" 
+                  stroke={traceProgress >= 1 ? (traceDest === "malicious" && traceProgress === 2 ? "#ef4444" : "#3b82f6") : "#3b82f6"} 
                   strokeWidth="2" 
                   strokeDasharray="8 12" 
-                  className="animate-[dash_10s_linear_infinite]"
+                  className={`animate-[dash_10s_linear_infinite] transition-colors duration-300 ${traceProgress >= 1 ? "opacity-100" : "opacity-30"}`}
                   style={{ strokeDashoffset: 100 }}
                 />
 
@@ -182,10 +295,10 @@ export default function NetworkTopology() {
                 <path d="M 320 225 L 480 225" stroke="#171717" strokeWidth="3" />
                 <path 
                   d="M 320 225 L 480 225" 
-                  stroke="#10b981" 
+                  stroke={traceProgress >= 2 ? (traceDest === "malicious" ? "#ef4444" : "#10b981") : "#10b981"} 
                   strokeWidth="2" 
                   strokeDasharray="8 12" 
-                  className="animate-[dash_10s_linear_infinite]"
+                  className={`animate-[dash_10s_linear_infinite] transition-colors duration-300 ${traceProgress >= 2 && traceDest !== "malicious" ? "opacity-100" : "opacity-30"}`}
                   style={{ strokeDashoffset: 100 }}
                 />
 
@@ -196,7 +309,7 @@ export default function NetworkTopology() {
                   stroke="#a855f7" 
                   strokeWidth="2" 
                   strokeDasharray="8 12" 
-                  className="animate-[dash_15s_linear_infinite]"
+                  className={`animate-[dash_15s_linear_infinite] ${traceProgress >= 3 && traceDest === "ad" ? "opacity-100" : "opacity-30"}`}
                   style={{ strokeDashoffset: 100 }}
                 />
 
@@ -207,7 +320,7 @@ export default function NetworkTopology() {
                   stroke="#a855f7" 
                   strokeWidth="2" 
                   strokeDasharray="8 12" 
-                  className="animate-[dash_15s_linear_infinite]"
+                  className="animate-[dash_15s_linear_infinite] opacity-30"
                   style={{ strokeDashoffset: 100 }}
                 />
 
@@ -222,7 +335,7 @@ export default function NetworkTopology() {
                   <g className="transition-transform duration-300 group-hover:scale-110" style={{ transformOrigin: "120px 225px" }}>
                     <circle cx="120" cy="225" r="28" fill="#3b82f6" fillOpacity="0.1" />
                     <foreignObject x="108" y="213" width="24" height="24">
-                      <Globe className="w-6 h-6 text-blue-500" />
+                      <Globe className={`w-6 h-6 transition-colors ${traceProgress === 1 ? "text-blue-400" : "text-blue-500"}`} />
                     </foreignObject>
                   </g>
                   <text x="120" y="280" textAnchor="middle" fill="#737373" className="text-xs font-mono group-hover:fill-white transition-colors duration-300">WAN GATEWAY</text>
@@ -233,11 +346,15 @@ export default function NetworkTopology() {
                   className="cursor-pointer group"
                   onClick={() => setActiveNode("firewall")}
                 >
-                  <circle cx="300" cy="225" r="40" fill="#080808" stroke={activeNode === "firewall" ? "#10b981" : "#262626"} strokeWidth="2" className="transition-all duration-300 group-hover:stroke-emerald-400 group-hover:fill-emerald-950/20" />
+                  <circle cx="300" cy="225" r="40" fill="#080808" stroke={firewallAlarm ? "#ef4444" : activeNode === "firewall" ? "#10b981" : "#262626"} strokeWidth="2" className={`transition-all duration-300 group-hover:stroke-emerald-400 group-hover:fill-emerald-950/20 ${firewallAlarm ? "animate-pulse fill-red-950/20" : ""}`} />
                   <g className="transition-transform duration-300 group-hover:scale-110" style={{ transformOrigin: "300px 225px" }}>
-                    <circle cx="300" cy="225" r="32" fill="#10b981" fillOpacity="0.1" />
+                    <circle cx="300" cy="225" r="32" fill={firewallAlarm ? "#ef4444" : "#10b981"} fillOpacity="0.1" />
                     <foreignObject x="288" y="213" width="24" height="24">
-                      <Shield className="w-6 h-6 text-emerald-500" />
+                      {firewallAlarm ? (
+                        <ShieldAlert className="w-6 h-6 text-red-500" />
+                      ) : (
+                        <Shield className="w-6 h-6 text-emerald-500" />
+                      )}
                     </foreignObject>
                   </g>
                   <text x="300" y="285" textAnchor="middle" fill="#737373" className="text-xs font-mono group-hover:fill-white transition-colors duration-300">SOPHOS FIREWALL</text>
@@ -308,9 +425,9 @@ export default function NetworkTopology() {
                   transition={{ duration: 0.3 }}
                   className="h-full flex flex-col justify-between"
                 >
-                  <div>
+                  <div className="space-y-5">
                     {/* Node Header */}
-                    <div className="flex items-center gap-4 border-b border-white/5 pb-5 mb-5">
+                    <div className="flex items-center gap-4 border-b border-white/5 pb-4 mb-4">
                       <div className="p-3 bg-white/5 border border-white/10 rounded-2xl">
                         {nodeDetails[activeNode].icon}
                       </div>
@@ -324,40 +441,150 @@ export default function NetworkTopology() {
                       </div>
                     </div>
 
-                    {/* Description */}
-                    <p className="text-sm text-neutral-400 font-light leading-relaxed mb-6">
-                      {nodeDetails[activeNode].description}
-                    </p>
+                    {/* INTERACTIVE COMPONENT: WAN TRACEROUTE SIMULATION */}
+                    {activeNode === "wan" && (
+                      <div className="border border-white/5 bg-black/45 rounded-2xl p-4 space-y-4">
+                        <h5 className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-400 flex items-center gap-1.5">
+                          <Activity className="w-3.5 h-3.5 text-blue-400" /> Traceroute tool
+                        </h5>
+                        
+                        <div className="space-y-2">
+                          <label className="text-[10px] text-neutral-500 font-mono block">SELECT DESTINATION:</label>
+                          <div className="grid grid-cols-3 gap-1.5">
+                            {[
+                              { id: "google", name: "Google DNS" },
+                              { id: "ad", name: "AD Host" },
+                              { id: "malicious", name: "TOR Node" }
+                            ].map((opt) => (
+                              <button
+                                key={opt.id}
+                                disabled={isTracing}
+                                onClick={() => setTraceDest(opt.id as any)}
+                                className={`py-1.5 px-1 text-[10px] font-mono border rounded-lg transition-all ${
+                                  traceDest === opt.id
+                                    ? opt.id === "malicious"
+                                      ? "border-red-500/40 bg-red-950/20 text-red-400"
+                                      : "border-blue-500/40 bg-blue-950/20 text-blue-400"
+                                    : "border-white/[0.05] bg-[#0c0c0c] text-neutral-500 hover:text-white"
+                                }`}
+                              >
+                                {opt.name}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
 
-                    {/* Stats List */}
-                    <h5 className="text-xs font-mono uppercase tracking-[0.2em] text-neutral-500 mb-3">Live Telemetry</h5>
-                    <div className="grid grid-cols-1 gap-2.5 mb-6">
-                      {nodeDetails[activeNode].stats.map((stat, idx) => (
-                        <div key={idx} className="flex justify-between items-center bg-white/[0.02] border border-white/[0.03] px-3.5 py-2.5 rounded-xl text-xs">
-                          <span className="text-neutral-500 font-light">{stat.label}</span>
-                          <span className="text-white font-mono flex items-center gap-1.5">
-                            {stat.icon}
-                            {stat.value}
+                        <div className="flex gap-2">
+                          <button
+                            onClick={startTraceroute}
+                            disabled={isTracing}
+                            className="flex-1 py-2 px-3 bg-blue-600 hover:bg-blue-500 disabled:opacity-40 rounded-xl text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
+                          >
+                            <Play className="w-3.5 h-3.5" /> Start Trace
+                          </button>
+                          <button
+                            onClick={resetTraceroute}
+                            className="py-2 px-3 bg-neutral-900 border border-white/10 hover:border-white/20 text-neutral-300 rounded-xl font-mono text-xs flex items-center justify-center gap-1.5 transition-all"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" /> Reset
+                          </button>
+                        </div>
+
+                        {/* Terminal output box */}
+                        <div className="bg-black border border-white/5 rounded-xl p-3 h-32 overflow-y-auto font-mono text-[9px] text-neutral-400 space-y-1 leading-relaxed scrollbar-thin">
+                          {traceLogs.length === 0 ? (
+                            <span className="text-neutral-600">Traceroute results will stream here...</span>
+                          ) : (
+                            traceLogs.map((log, idx) => (
+                              <div key={idx} className="whitespace-pre-wrap">{log}</div>
+                            ))
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* INTERACTIVE COMPONENT: AD DS GROUP POLICY MANAGER */}
+                    {activeNode === "server" && (
+                      <div className="border border-white/5 bg-black/45 rounded-2xl p-4 space-y-4">
+                        <div className="flex justify-between items-center">
+                          <h5 className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-400">
+                            AD DS GPO MANAGER
+                          </h5>
+                          <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
+                            getComplianceScore() >= 85 
+                              ? "bg-emerald-950/30 text-emerald-400 border border-emerald-500/20"
+                              : "bg-amber-950/30 text-amber-400 border border-amber-500/20"
+                          }`}>
+                            SCORE: {getComplianceScore()}%
                           </span>
                         </div>
-                      ))}
+
+                        <div className="space-y-2.5">
+                          {[
+                            { key: "passwordComplexity", label: "Password Complexity GPO (+15%)" },
+                            { key: "usbBlocking", label: "Disable Host USB Ports GPO (+15%)" },
+                            { key: "powershellRestriction", label: "PowerShell Exec Restriction (+10%)" },
+                            { key: "edrEnforcement", label: "Auto-Deploy Seqrite EDR (+10%)" }
+                          ].map((gpo) => (
+                            <div 
+                              key={gpo.key}
+                              onClick={() => handleGpoToggle(gpo.key as any)}
+                              className="flex justify-between items-center p-2 border border-white/[0.03] bg-[#0c0c0c] hover:bg-[#121212] rounded-xl cursor-pointer select-none transition-colors"
+                            >
+                              <span className="text-[10px] text-neutral-400 font-mono">{gpo.label}</span>
+                              <button className="text-neutral-500 hover:text-white transition-colors">
+                                {gpos[gpo.key as keyof typeof gpos] ? (
+                                  <ToggleRight className="w-6 h-6 text-emerald-500" />
+                                ) : (
+                                  <ToggleLeft className="w-6 h-6 text-neutral-700" />
+                                )}
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Standard details description (if not showing full details on specific nodes to save space) */}
+                    {activeNode !== "wan" && activeNode !== "server" && (
+                      <p className="text-sm text-neutral-400 font-light leading-relaxed">
+                        {nodeDetails[activeNode].description}
+                      </p>
+                    )}
+
+                    {/* Stats List */}
+                    <div>
+                      <h5 className="text-xs font-mono uppercase tracking-[0.2em] text-neutral-500 mb-2.5">Live Telemetry</h5>
+                      <div className="grid grid-cols-1 gap-2">
+                        {nodeDetails[activeNode].stats.map((stat, idx) => (
+                          <div key={idx} className="flex justify-between items-center bg-white/[0.02] border border-white/[0.03] px-3.5 py-2 rounded-xl text-xs">
+                            <span className="text-neutral-500 font-light">{stat.label}</span>
+                            <span className="text-white font-mono flex items-center gap-1.5">
+                              {stat.icon}
+                              {stat.value}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
 
                     {/* Security Logs */}
-                    <h5 className="text-xs font-mono uppercase tracking-[0.2em] text-neutral-500 mb-3">Host Security Logs</h5>
-                    <div className="bg-black/60 border border-white/5 rounded-xl p-3.5 font-mono text-[10px] text-neutral-400 space-y-2 leading-relaxed">
-                      {nodeDetails[activeNode].logs.map((log, idx) => (
-                        <div key={idx} className="flex gap-2">
-                          <span className="text-neutral-600 select-none">[{idx}]</span>
-                          <span className="break-all">{log}</span>
-                        </div>
-                      ))}
+                    <div>
+                      <h5 className="text-xs font-mono uppercase tracking-[0.2em] text-neutral-500 mb-2.5">Host Security Logs</h5>
+                      <div className="bg-black/60 border border-white/5 rounded-xl p-3.5 font-mono text-[10px] text-neutral-400 space-y-1.5 leading-relaxed">
+                        {nodeDetails[activeNode].logs.map((log, idx) => (
+                          <div key={idx} className="flex gap-2">
+                            <span className="text-neutral-600 select-none">[{idx}]</span>
+                            <span className="break-all">{log}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
                   <button 
                     onClick={() => setActiveNode(null)}
-                    className="mt-8 w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-xs font-mono rounded-xl text-neutral-300 hover:text-white transition-all text-center"
+                    className="mt-6 w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-xs font-mono rounded-xl text-neutral-300 hover:text-white transition-all text-center"
                   >
                     Clear Telemetry View
                   </button>

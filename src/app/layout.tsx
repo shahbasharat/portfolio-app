@@ -11,33 +11,43 @@ import ParticleBackground from "@/components/ParticleBackground";
 import KonamiCode from "@/components/KonamiCode";
 import Navbar from "@/components/Navbar";
 import FilmGrain from "@/components/FilmGrain";
+import AvailabilityBadge from "@/components/AvailabilityBadge";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const BASE_URL = "https://basharatsalam.vercel.app";
+
 export const metadata: Metadata = {
   title: "Basharat Salam | System & Network Administrator",
-  description: "Portfolio of Basharat Salam, a dedicated System Admin and Network Administrator specializing in enterprise IT environments, cybersecurity, and infrastructure.",
-  keywords: ["System Administrator", "Network Administrator", "Cybersecurity", "Sophos Firewall", "CCNA", "IT Support", "Seqrite EDR", "Portfolio"],
-  authors: [{ name: "Basharat Salam" }],
+  description: "Portfolio of Basharat Salam — System Admin and Network Administrator specializing in enterprise IT, Sophos firewall, Seqrite EDR, Ruckus Wi-Fi, and cybersecurity.",
+  keywords: ["System Administrator", "Network Administrator", "Cybersecurity", "Sophos Firewall", "CCNA", "IT Support", "Seqrite EDR", "Ruckus", "Active Directory", "Portfolio", "Basharat Salam"],
+  authors: [{ name: "Basharat Salam", url: BASE_URL }],
+  metadataBase: new URL(BASE_URL),
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon-16x16.png",
     apple: "/favicon-32x32.png",
   },
   openGraph: {
-    title: "Basharat Salam | System & Network Administrator | Portfolio",
-    description: "Explore the technical portfolio, cybersecurity projects, and enterprise networking implementations of Basharat Salam.",
-    url: "https://v0-basharat.vercel.app",
+    title: "Basharat Salam | System & Network Administrator",
+    description: "Explore the technical portfolio, cybersecurity projects, and enterprise networking implementations of Basharat Salam. Open to work — Sophos, EDR, Ruckus, AD specialist.",
+    url: BASE_URL,
     siteName: "Basharat Salam Portfolio",
     type: "website",
     images: [
       {
-        url: "https://v0-basharat.vercel.app/og-image.jpg",
+        url: `${BASE_URL}/og-image.jpg`,
         width: 1200,
         height: 630,
-        alt: "Basharat Salam Portfolio",
+        alt: "Basharat Salam — System & Network Administrator Portfolio",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Basharat Salam | System & Network Administrator",
+    description: "Enterprise IT professional specializing in Sophos, EDR, Ruckus & Active Directory. Open to work.",
+    images: [`${BASE_URL}/og-image.jpg`],
   },
 };
 
@@ -58,6 +68,7 @@ export default function RootLayout({
         <KonamiCode />
         <HomeButton />
         <ScrollToTop />
+        <AvailabilityBadge />
         {children}
         <Analytics />
         <script
@@ -68,10 +79,12 @@ export default function RootLayout({
               "@type": "Person",
               "name": "Basharat Salam",
               "jobTitle": "System & Network Administrator",
-              "url": "https://v0-basharat.vercel.app",
+              "url": BASE_URL,
+              "email": "shahbasharat577@gmail.com",
               "sameAs": [
                 "https://www.linkedin.com/in/basharatsalam",
-                "https://github.com/shahbasharat"
+                "https://github.com/shahbasharat",
+                "https://tryhackme.com/p/sbasharat577"
               ]
             })
           }}
