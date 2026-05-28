@@ -6,8 +6,15 @@ export default function CustomCursor() {
   const circleRef = useRef<HTMLDivElement>(null);
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
+    const hasFinePointer = window.matchMedia("(pointer: fine)").matches;
+    if (!hasFinePointer) {
+      setIsTouch(true);
+      return;
+    }
+
     const dot = dotRef.current;
     const circle = circleRef.current;
     if (!dot || !circle) return;
@@ -63,6 +70,8 @@ export default function CustomCursor() {
       cancelAnimationFrame(animationId);
     };
   }, []);
+
+  if (isTouch) return null;
 
   return (
     <>

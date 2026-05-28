@@ -93,17 +93,22 @@ export default function ParticleBackground() {
       mouse = { x: -1000, y: -1000 };
     };
 
+    const handleResize = () => {
+      resize();
+      createParticles();
+    };
+
     resize();
     createParticles();
     drawParticles();
 
-    window.addEventListener("resize", () => { resize(); createParticles(); });
+    window.addEventListener("resize", handleResize);
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseleave", onMouseLeave);
 
     return () => {
       cancelAnimationFrame(animationId);
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseleave", onMouseLeave);
     };

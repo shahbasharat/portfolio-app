@@ -2,8 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  cursor: none;
+@media (pointer: fine) {
+  * {
+    cursor: none;
+  }
 }
 
 .resume-page,
